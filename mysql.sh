@@ -13,6 +13,7 @@ echo "Script Start-Time is:: $TIME_STAMP"
 if [ $USERID -ne 0 ]
 then
     echo -e "$R Please Run this Script as super User $N"
+    exit 1
     else
         echo -e "\e[35m Running the Script as super User $N"
 fi
