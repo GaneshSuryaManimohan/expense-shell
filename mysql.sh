@@ -28,6 +28,12 @@ VALIDATE(){
 }
 
 dnf install mysql-server -y &>>$LOG_FILE
+if [ $? -eq 0 ] #if package is already installed then it will skip else it will install
+    then
+        echo -e "$i is already installed.....$Y SKIPPING $N"
+    else
+        dnf install mysql-server -y &>>$LOG_FILE
+fi
 VALIDATE $? "Installation of MySQL-Server"
 
 systemctl enable mysqld &>>$LOG_FILE
