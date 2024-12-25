@@ -29,10 +29,10 @@ VALIDATE(){
 
 dnf install mysql-server -y &>>$LOG_FILE
 if [ $? -eq 0 ] #if package is already installed then it will skip else it will install
-    then
-        echo -e "MySQL is already installed.....$Y SKIPPING $N"
-    else
-        dnf install mysql-server -y &>>$LOG_FILE
+then
+    echo -e "MySQL is already installed.....$Y SKIPPING $N"
+else
+    dnf install mysql-server -y &>>$LOG_FILE
 fi
 VALIDATE $? "Installation of MySQL-Server"
 
@@ -42,5 +42,13 @@ VALIDATE $? "Enabling MySQL-Server"
 systemctl start mysqld &>>$LOG_FILE
 VALIDATE $? "Starting MySQL-Server"
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
-VALIDATE $? "Set up MySQL-Server root password"
+# mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
+# VALIDATE $? "Set up MySQL-Server root password"
+
+if [ $? -ne 0 ]
+then 
+    mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
+    VALIDATE $? "Setting up root password"
+else
+    echo -e "Root password for MySQL server is already set..... $Y SKIPPING $N"
+fi
