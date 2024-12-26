@@ -40,6 +40,9 @@ VALIDATE $? "Starting MySQL-Server"
 # mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
 # VALIDATE $? "Set up MySQL-Server root password"
 
+#Below code will be useful for idempotent nature
+
+mysql -h db.surya-devops.online -uroot -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
 if [ $? -ne 0 ]
 then 
     mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
