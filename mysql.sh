@@ -10,7 +10,7 @@ N="\e[0m"
 P="\e[35m"
 echo "Script Start-Time is:: $TIME_STAMP"
 echo "Please enter DB Password:: "
-read -s mysql_root_password
+read mysql_root_password
 
 if [ $USERID -ne 0 ]
 then
