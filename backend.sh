@@ -49,38 +49,38 @@ else
     echo -e "expense user already exists.....$Y SKIPPING $N"
 fi
 
-mkdir -p /app
+mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "creating /app directory"
 
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
 VALIDATE $? "Downloading Content for Backend"
 
 cd /app
-unzip /tmp/backend.zip
+unzip /tmp/backend.zip &>>$LOG_FILE
 VALIDATE $? "Unzip backend code"
 
-npm install
+npm install &>>$LOG_FILE
 VALIDATE $? "Downloading noejs dependencies"
 
-cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service &>>$LOG_FILE
 VALIDATE $? "copied backend.service to /etc/systemd/system"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Daemon Reload"
 
-systemctl start backend
+systemctl start backend &>>$LOG_FILE
 VALIDATE $? "Starting  Backend"
 
-systemctl enable backend
+systemctl enable backend &>>$LOG_FILE
 VALIDATE $? "Enabling  Backend service"
 
-dnf install mysql -y
+dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL Client"
 
-mysql -h db.surya-devops.online -uroot -p${mysql_root_password} < /app/schema/backend.sql
+mysql -h db.surya-devops.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOG_FILE
 VALIDATE $? "Loading backend.sql schema"
 
-systemctl restart backend
+systemctl restart backend &>>$LOG_FILE
 VALIDATE $? "Restarting Backend service"
 
 
