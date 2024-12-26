@@ -42,10 +42,13 @@ VALIDATE $? "Starting MySQL-Server"
 
 #Below code will be useful for idempotent nature
 
-mysql -h db.surya-devops.online -uroot -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
-if [ $? -ne 0 ]
-then 
-    mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
+# Check if root password is set
+mysql -h db.surya-devops.online -uroot -e 'SELECT user, host, authentication_string FROM mysql.user WHERE user="root";' >>$LOG_FILE 2>&1
+
+# Check if root password is empty (empty authentication_string means no password set)
+if [ $? -ne 0 ] || grep -q 'root.*''\s*$' $LOG_FILE; then
+    # Root password is not set or there is an issue
+    mysql_secure_installation --set-root-pass ExpenseApp@1 >>$LOG_FILE 2>&1
     VALIDATE $? "Setting up root password"
 else
     echo -e "Root password for MySQL server is already set..... $Y SKIPPING $N"
