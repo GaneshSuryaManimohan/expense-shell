@@ -45,7 +45,6 @@ curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expe
 VALIDATE $? "Downloading Frontend Content"
 
 cd /usr/share/nginx/html
-rm -rf /tmp/* &>>$LOG_FILE
 unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "Extracting Content to /tmp"
 
@@ -54,8 +53,4 @@ VALIDATE $? "Copying expense.conf to /etc/nginx/default.d/"
 
 
 systemctl restart nginx &>>$LOG_FILE
-
-
-
-
 
