@@ -9,6 +9,8 @@ Y="\e[33m"
 N="\e[0m"
 P="\e[35m"
 echo "Script Start-Time is:: $TIME_STAMP"
+echo "Please enter DB Password:: "
+read -s mysql_root_password
 
 if [ $USERID -ne 0 ]
 then
@@ -41,10 +43,10 @@ VALIDATE $? "Starting MySQL-Server"
 # VALIDATE $? "Set up MySQL-Server root password"
 
 #Below code will be useful for idempotent nature
-mysql -h db.surya-devops.online -uroot -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
+mysql -h db.surya-devops.online -uroot -p${mysql_root_password} -e 'show databases;' &>>$LOG_FILE
 if [ $? -ne 0 ]
 then 
-    mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE
+    mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOG_FILE
     VALIDATE $? "Setting up root password"
 else
     echo -e "Root password for MySQL server is already set..... $Y SKIPPING $N"
